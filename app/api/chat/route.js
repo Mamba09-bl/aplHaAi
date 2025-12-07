@@ -2,8 +2,10 @@ import OpenAI from "openai"; // <- ADD THIS
 import chatModel from "@/modules/chat";
 import { getUser } from "@/lib/getUser";
 import userModel from "@/modules/user";
+import { connectDB } from "@/lib/mongodb";
 
 export async function GET() {
+  await connectDB();
   const auth = await getUser();
   if (!auth || !auth.user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -26,12 +28,6 @@ export async function GET() {
   // }
   // console.log("working:", Allchat);
 
-  if (Alluser.hasPaid === false) {
-    return Response.json({
-      Allchat,
-      notDone: true,
-    });
-  }
   console.log("working:", Allchat);
   return Response.json({
     Allchat,
@@ -44,6 +40,7 @@ export async function GET() {
 // code one
 export async function POST(req) {
   try {
+    await connectDB();
     const auth = await getUser();
     const Alluser = await userModel.findOne({ email: auth.user.email });
 

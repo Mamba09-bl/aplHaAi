@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import { connectDB } from "@/lib/mongodb";
-
-await connectDB();
 
 const SignUpSchema = new mongoose.Schema({
   Username: String,
